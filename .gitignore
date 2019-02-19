@@ -1,0 +1,5 @@
+.vscode
+.data
+node_modules
+dist/**/*
+
