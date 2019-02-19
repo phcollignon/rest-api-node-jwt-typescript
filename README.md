@@ -51,9 +51,11 @@ git clone https://github.com/Philippe-Collignon/rest-api-node-jwt-typescript.git
 ```
 cd rest-api-node-jwt-typescript
 npm install
+npm run build
 ```
 - Launch demo Node and Mongo server in docker containers
 ```
+docker-compose build
 docker-compose up
 ```
 ( *Alternatively, you can run and configure your local or cloud Mongo server and start Node server with
