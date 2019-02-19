@@ -1,8 +1,5 @@
 # Node Rest API with JWT written in TypeScript
 
-
-
-# Introduction
 - This is a simple **Node Rest Api** written in **Typescript**.  
 - Routes can be protected with **JWT tokens**.
 - Authentification with Passport. 
