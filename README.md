@@ -37,7 +37,8 @@ export class ProductRoutes {
     }
 }
 ```
-
+More informations about the architecture of the API can be found in this Medium story :
+https://medium.com/@phc_20530/node-rest-api-jwt-in-typescript-e6a8ae5cd8f8
 
 # Installation
 - Clone the repository
