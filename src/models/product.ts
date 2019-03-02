@@ -8,10 +8,15 @@ export interface IProduct extends Document {
 }
 
 export const productSchema = new Schema({
-  productId: String,
+  productId: {
+    type: String, required: true,
+    unique: true
+  },
   name: String,
   price: Number,
   quantity: Number
 });
+
+
 
 export const Product: Model<IProduct> = model<IProduct>("Product", productSchema);
