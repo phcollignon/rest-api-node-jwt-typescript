@@ -1,40 +1,9 @@
-import { Request, Response, NextFunction } from "express";
-
-import * as jwt from "jsonwebtoken";
-import { JWT_SECRET } from "../util/secrets";
-import bcrypt from "bcrypt-nodejs";
+import { NextFunction, Request, Response } from "express";
 import passport from "passport";
-import { User } from "../models/user";
 import "../auth/passportHandler";
 
+
 export class AuthController {
-
-  public async registerUser(req: Request, res: Response): Promise<void> {
-    const hashedPassword = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10));
-
-    await User.create({
-      username: req.body.username,
-      password: hashedPassword,
-
-    });
-
-    const token = jwt.sign({ username: req.body.username, }, JWT_SECRET);
-    res.status(200).send({ token: token });
-  }
-
-  public authenticateUser(req: Request, res: Response, next: NextFunction) {
-    passport.authenticate("local", function (err, user, info) {
-      // no async/await because passport works only with callback ..
-      if (err) return next(err);
-      if (!user) {
-        return res.status(401).json({ status: "error", code: "unauthorized" });
-      } else {
-        const token = jwt.sign({ username: user.username }, JWT_SECRET);
-        res.status(200).send({ token: token });
-      }
-    });
-  }
-
 
   public authenticateJWT(req: Request, res: Response, next: NextFunction) {
     passport.authenticate("jwt", function (err, user, info) {
@@ -50,6 +19,40 @@ export class AuthController {
     })(req, res, next);
   }
 
+  public authorizeJWT(req: Request, res: Response, next: NextFunction) {
+    passport.authenticate("jwt", function (err, user, jwtToken) {
+      if (err) {
+        console.log(err);
+        return res.status(401).json({ status: "error", code: "unauthorized" });
+      }
+      if (!user) {
+        return res.status(401).json({ status: "error", code: "unauthorized" });
+      } else {
+        const scope = req.baseUrl.split("/").slice(-1)[0];
+        const authScope = jwtToken.scope;
+
+        if (authScope && authScope.indexOf(scope) > -1) {
+          return next();
+        }
+        else {
+          return res.status(401).json({ status: "error", code: "unauthorized" });
+        }
+      }
+    })(req, res, next);
+  }
 
 
 }
+
+
+/*
+TODO
+export let isAuthorized = (req: Request, res: Response, next: NextFunction) => {
+  const scope = req.path.split("/").slice(-1)[0];
+
+  if (_.find(req.user.scopes, { kind: scope })) {
+    next();
+  } else {
+    res.status(401).send({ token: null });
+  }
+};*/

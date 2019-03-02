@@ -6,9 +6,10 @@
     "start": "npm run serve",
     "build": "npm run build-ts && npm run tslint",
     "serve": "node dist/server.js",
-    "watch": "nodemon dist/server.js",
+    "watch-node": "sleep 5 && nodemon dist/server.js",
     "build-ts": "tsc",
     "watch-ts": "tsc -w",
+    "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run watch-node\"",
     "tslint": "tslint -c tslint.json -p tsconfig.json"
   },
   "dependencies": {
@@ -35,6 +36,7 @@
     "uuid": "^3.3.2"
   },
   "devDependencies": {
+    "concurrently": "^4.1.0",
     "tslint": "^5.12.1"
   },
   "main": "index.js",

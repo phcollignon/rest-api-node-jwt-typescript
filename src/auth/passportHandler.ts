@@ -31,10 +31,11 @@ passport.use(new JwtStrategy(
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     secretOrKey: JWT_SECRET
   }, function (jwtToken, done) {
+   console.log(jwtToken);
     User.findOne({ username: jwtToken.username }, function (err, user) {
       if (err) { return done(err, false); }
       if (user) {
-        return done(undefined, user);
+        return done(undefined, user , jwtToken);
       } else {
         return done(undefined, false);
       }
@@ -42,14 +43,3 @@ passport.use(new JwtStrategy(
   }));
 
 
-/*
-TODO
-export let isAuthorized = (req: Request, res: Response, next: NextFunction) => {
-  const scope = req.path.split("/").slice(-1)[0];
-
-  if (_.find(req.user.scopes, { kind: scope })) {
-    next();
-  } else {
-    res.status(401).send({ token: null });
-  }
-};*/

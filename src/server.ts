@@ -7,7 +7,7 @@ import cors from "cors";
 import { MONGODB_URI } from "./util/secrets";
 
 import { ProductRoutes } from "./routes/productRoutes";
-import { AuthRoutes } from "./routes/authRoutes";
+import { UserRoutes } from "./routes/userRoutes";
 
 class Server {
   public app: express.Application;
@@ -20,8 +20,9 @@ class Server {
   }
 
   public routes(): void {
-    this.app.use("/api/auth", new AuthRoutes().router);
+    this.app.use("/api/user", new UserRoutes().router);
     this.app.use("/api/products", new ProductRoutes().router);
+    this.app.use("/api/productsdeny", new ProductRoutes().router);
   }
 
   public config(): void {
