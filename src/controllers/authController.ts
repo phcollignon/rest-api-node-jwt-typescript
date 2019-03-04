@@ -30,7 +30,6 @@ export class AuthController {
       } else {
         const scope = req.baseUrl.split("/").slice(-1)[0];
         const authScope = jwtToken.scope;
-
         if (authScope && authScope.indexOf(scope) > -1) {
           return next();
         }
@@ -44,15 +43,3 @@ export class AuthController {
 
 }
 
-
-/*
-TODO
-export let isAuthorized = (req: Request, res: Response, next: NextFunction) => {
-  const scope = req.path.split("/").slice(-1)[0];
-
-  if (_.find(req.user.scopes, { kind: scope })) {
-    next();
-  } else {
-    res.status(401).send({ token: null });
-  }
-};*/

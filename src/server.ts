@@ -22,7 +22,6 @@ class Server {
   public routes(): void {
     this.app.use("/api/user", new UserRoutes().router);
     this.app.use("/api/products", new ProductRoutes().router);
-    this.app.use("/api/productsdeny", new ProductRoutes().router);
   }
 
   public config(): void {
