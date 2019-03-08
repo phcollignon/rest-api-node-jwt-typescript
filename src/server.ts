@@ -32,33 +32,33 @@ class Server {
     this.app.use(cors());
   }
 
-  private  mongo() {
-    const mongoUrl = MONGODB_URI;
-    mongoose.Promise = Promise;
-    mongoose.connection.on("connected", () => {
+  private mongo() {
+
+    const connection = mongoose.connection;
+    connection.on("connected", () => {
       console.log("Mongo Connection Established");
     });
-    mongoose.connection.on("reconnected", () => {
+    connection.on("reconnected", () => {
       console.log("Mongo Connection Reestablished");
     });
-    mongoose.connection.on("disconnected", () => {
+    connection.on("disconnected", () => {
       console.log("Mongo Connection Disconnected");
+      console.log("Trying to reconnect to Mongo ...");
+      setTimeout(() => { mongoose.connect(MONGODB_URI, { autoReconnect: true, keepAlive: true, socketTimeoutMS: 3000,  connectTimeoutMS: 30000 }); }, 3000);
     });
-    mongoose.connection.on("close", () => {
+    connection.on("close", () => {
       console.log("Mongo Connection Closed");
     });
-    mongoose.connection.on("error", (error: Error) => {
+    connection.on("error", (error: Error) => {
       console.log("Mongo Connection ERROR: " + error);
     });
 
     const run = async () => {
-      await mongoose.connect(mongoUrl, {
-        autoReconnect: true,
-        reconnectTries: 1000,
-        reconnectInterval: 2
+      await mongoose.connect(MONGODB_URI, {
+        autoReconnect: true, keepAlive: true
       });
     };
-     run().catch(error => console.error(error));
+    run().catch(error => console.error(error));
   }
 
   public start(): void {
