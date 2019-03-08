@@ -33,7 +33,6 @@ class Server {
   }
 
   private mongo() {
-
     const connection = mongoose.connection;
     connection.on("connected", () => {
       console.log("Mongo Connection Established");
@@ -44,7 +43,12 @@ class Server {
     connection.on("disconnected", () => {
       console.log("Mongo Connection Disconnected");
       console.log("Trying to reconnect to Mongo ...");
-      setTimeout(() => { mongoose.connect(MONGODB_URI, { autoReconnect: true, keepAlive: true, socketTimeoutMS: 3000,  connectTimeoutMS: 30000 }); }, 3000);
+      setTimeout(() => {
+        mongoose.connect(MONGODB_URI, {
+          autoReconnect: true, keepAlive: true,
+          socketTimeoutMS: 3000, connectTimeoutMS: 3000
+        });
+      }, 3000);
     });
     connection.on("close", () => {
       console.log("Mongo Connection Closed");
@@ -60,6 +64,7 @@ class Server {
     };
     run().catch(error => console.error(error));
   }
+
 
   public start(): void {
     this.app.listen(this.app.get("port"), () => {
