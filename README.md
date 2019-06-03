@@ -68,7 +68,7 @@ Please check package.json for other useful npm scripts  (for example typescript 
 
 
 ## Step1 : Register a user
-Send a POST request to `http://localhost:3000/api/auth/register` 
+Send a POST request to `http://localhost:3000/api/user/register` 
 with the following payload ** :
 ```json
 {
